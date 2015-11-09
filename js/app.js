@@ -6,7 +6,8 @@ var App = function () {
 		uploadUrl  : 'uploader.php',
 		document   : $(document),
 		actionBtns : $('.action-btns'),
-		dwldCsvBtn : $('.gen-csv')
+		dwldCsvBtn : $('.gen-csv'),
+		dwldJsonBtn : $('.gen-json')
 	};
 
 	function _processFile ( $input ) {
@@ -14,6 +15,44 @@ var App = function () {
 
 		settings.reader.readAsText(file, 'UTF-8');
 		settings.reader.onload = _uploadFile;
+	}
+
+	function _generateJson ( button ) {
+		href = button.attr('href');
+
+		var heads = $('.csv-content table thead th').map(function(index, head ) {
+			return $(head).text();
+		});
+
+		var jsonData = $('.csv-content table tbody tr').map(function(i, v) {
+		    var $td =  $('td', this);
+		    var jsonObj = {};
+
+		    $(heads).each(function(index, head) {
+		    	jsonObj[ head ] = $($td[ index ]).text();
+		    });
+
+		    return jsonObj;
+		}).get();
+
+
+		$.ajax({
+			url: href,
+			method: 'post',
+			data: { jsonData: jsonData },
+			dataType: 'json',
+			beforeSend: function () { },
+			success: function ( data ) {
+				if ( $.trim(data.filePath) === '' ) {
+					$('.csv-content').prepend('Unable to generate JSON. Maybe you should try again!');
+				} else {
+					var win = window.open(data.filePath, '_blank');
+					win.focus();
+				}
+			},
+			complete: function () { },
+			error: function () { }
+		});
 	}
 
 	function _generateCSV ( button ) {
@@ -137,6 +176,11 @@ var App = function () {
 			settings.dwldCsvBtn.on('click', function ( e ) {
 				e.preventDefault();
 				_generateCSV( $(this) );
+			});
+
+			settings.dwldJsonBtn.on('click', function ( e ) {
+				e.preventDefault();
+				_generateJson( $(this) );
 			});
 
 			$(document).on('click', '.delete-row', function ( e ) {

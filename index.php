@@ -42,7 +42,8 @@
 		</div>
 
 		<div class="action-btns" style="display: none;">
-			<a class="gen-csv" href="generate-csv.php">Download Updated CSV</a>		
+			<a class="gen-csv" href="generate-csv.php">Download Updated CSV</a>
+			<a class="gen-json" href="generate-json.php">Generate JSON</a>
 		</div>
 	</div>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
