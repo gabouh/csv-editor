@@ -1,3 +1,5 @@
+> ##Disclaimer! Contains probably the worst code that you will ever see today.
+
 # CSV Editor
 
 Edit your CSV data with no hassle.
